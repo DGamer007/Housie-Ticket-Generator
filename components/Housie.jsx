@@ -12,7 +12,11 @@ const Housie = () => {
     }
 
     const onChange = (e) => {
-        if (e.target.value <= 0) {
+        if (!e.target.value) {
+            setDisabled(true)
+            setNumber(e.target.value)
+        }
+        else if (e.target.value < 0) {
             setDisabled(true)
             setNumber(0)
         } else {

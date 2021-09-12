@@ -8,7 +8,7 @@
     "start:dev": "nodemon --watch root/server.js root/server.js",
     "dev": "webpack serve --config config/webpack/webpack.dev.js",
     "build:prod": "webpack --config config/webpack/webpack.prod.js",
-    "heroku:postbuild": "npm run build:prod"
+    "heroku-postbuild": "npm run build:prod"
   },
   "keywords": [],
   "author": "DGamer",

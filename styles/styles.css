@@ -1,9 +1,9 @@
 table tr td {
     border: 1px solid black;
-    width: 50px;
-    height: 50px;
+    width: 10vw;
+    height: 10vw;
     text-align: center;
-    font-size: 25px;
+    font-size: 5vw;
 }
 
 table {
@@ -11,20 +11,20 @@ table {
     margin-bottom: 10px;
 }
 
-.generator_container{
+.tickets_container{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.home_container{
+.header_container{
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
 }
 
-.home_input{
+.header_input{
     padding: 3px 10px;
 }
 
@@ -38,4 +38,17 @@ button{
 
 button:hover{
     cursor: pointer;
+}
+
+button:disabled{
+    opacity: 0.5;
+    cursor: default;
+}
+
+@media (min-width:720px) {
+    table tr td{
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
 }

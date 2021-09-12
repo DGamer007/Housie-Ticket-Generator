@@ -1,10 +1,9 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
-const Generator = () => {
+const Tickets = ({ number }) => {
 
     const limits = [
         { min: 0, max: 9 },
@@ -18,8 +17,6 @@ const Generator = () => {
         { min: 80, max: 89 },
         { min: 90, max: 99 }
     ]
-
-    const history = useLocation()
 
     const calculate = () => {
         const data = []
@@ -63,7 +60,7 @@ const Generator = () => {
         return cols
     }
 
-    const renderFunction = () => {
+    const gatherDetails = () => {
         const data = calculate()
         const finalOutput = []
         let TDs = []
@@ -85,14 +82,45 @@ const Generator = () => {
         return finalOutput
     }
 
+    const renderFinal = () => {
+        const allTables = []
+        let temp = []
+        let counter = 0
+
+        for (let i = 0; i < number; i++) {
+            if (counter === 6) {
+                counter = 0
+                allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
+                temp = []
+            }
+            temp.push(
+                <div key={uuidv4()} className="ticket">
+                    <table key={uuidv4()}>
+                        <tbody key={uuidv4()}>
+                            {
+                                gatherDetails()
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            )
+            counter++
+        }
+        allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
+
+        return allTables
+    }
+
     const printToPDF = async () => {
         const sections = document.getElementsByClassName('section')
         const pdf = new jsPDF('p', 'mm', 'a4')
+        let height = 0
 
         for (let i = 0; i < sections.length; i++) {
+            height = parseInt(270 * (sections[i].childElementCount / 6))
             const canvas = await html2canvas(sections[i])
             const imageData = canvas.toDataURL('image/png')
-            pdf.addImage(imageData, 'PNG', 37, 7)
+            pdf.addImage(imageData, 'PNG', 23, 12, 160, height)
             if ((i + 1) < sections.length)
                 pdf.addPage()
         }
@@ -101,42 +129,13 @@ const Generator = () => {
     }
 
     return (
-        <div className="generator_container">
+        <div className="tickets_container">
             <button onClick={printToPDF}>Print to PDF</button>
             <div id="tickets">
-                {
-                    (() => {
-                        const allTables = []
-                        let temp = []
-                        let counter = 0
-
-                        for (let i = 0; i < history.state; i++) {
-                            if (counter === 6) {
-                                counter = 0
-                                allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
-                                temp = []
-                            }
-                            temp.push(
-                                <div key={uuidv4()} className="ticket">
-                                    <table key={uuidv4()}>
-                                        <tbody key={uuidv4()}>
-                                            {
-                                                renderFunction()
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )
-                            counter++
-                        }
-                        allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
-
-                        return allTables
-                    })()
-                }
+                {renderFinal()}
             </div>
         </div>
     )
 }
 
-export default Generator
+export default Tickets

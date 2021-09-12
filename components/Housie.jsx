@@ -24,9 +24,9 @@ const Housie = () => {
     }
 
     return (
-        <div>
-            <input type="Number" value={number} onChange={onChange} placeholder="How Many ?" />
-            <button onClick={generatePDF}> Generate PDF </button>
+        <div className="home_container">
+            <input className="home_input" type="Number" value={number} onChange={onChange} placeholder="How Many ?" />
+            <button onClick={generatePDF}> Generate Tickets </button>
         </div>
     )
 }

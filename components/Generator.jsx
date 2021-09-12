@@ -1,6 +1,8 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const Generator = () => {
 
@@ -83,28 +85,56 @@ const Generator = () => {
         return finalOutput
     }
 
-    return (
-        <div>
-            {
-                (() => {
-                    const allTables = []
-                    for (let i = 0; i < history.state; i++) {
-                        allTables.push(
-                            <div key={uuidv4()}>
-                                <table key={uuidv4()}>
-                                    <tbody key={uuidv4()}>
-                                        {
-                                            renderFunction()
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        )
-                    }
+    const printToPDF = async () => {
+        const sections = document.getElementsByClassName('section')
+        const pdf = new jsPDF('p', 'mm', 'a4')
 
-                    return allTables
-                })()
-            }
+        for (let i = 0; i < sections.length; i++) {
+            const canvas = await html2canvas(sections[i])
+            const imageData = canvas.toDataURL('image/png')
+            pdf.addImage(imageData, 'PNG', 37, 7)
+            if ((i + 1) < sections.length)
+                pdf.addPage()
+        }
+
+        pdf.save('Tickets.pdf')
+    }
+
+    return (
+        <div className="generator_container">
+            <button onClick={printToPDF}>Print to PDF</button>
+            <div id="tickets">
+                {
+                    (() => {
+                        const allTables = []
+                        let temp = []
+                        let counter = 0
+
+                        for (let i = 0; i < history.state; i++) {
+                            if (counter === 6) {
+                                counter = 0
+                                allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
+                                temp = []
+                            }
+                            temp.push(
+                                <div key={uuidv4()} className="ticket">
+                                    <table key={uuidv4()}>
+                                        <tbody key={uuidv4()}>
+                                            {
+                                                renderFunction()
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )
+                            counter++
+                        }
+                        allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
+
+                        return allTables
+                    })()
+                }
+            </div>
         </div>
     )
 }

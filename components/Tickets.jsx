@@ -8,16 +8,16 @@ const Tickets = ({ number }) => {
     const [finalData, setFinalData] = useState([])
 
     const limits = [
-        { min: 0, max: 9 },
-        { min: 10, max: 19 },
-        { min: 20, max: 29 },
-        { min: 30, max: 39 },
-        { min: 40, max: 49 },
-        { min: 50, max: 59 },
-        { min: 60, max: 69 },
-        { min: 70, max: 79 },
-        { min: 80, max: 89 },
-        { min: 90, max: 99 }
+        { min: 0, max: 10 },
+        { min: 10, max: 20 },
+        { min: 20, max: 30 },
+        { min: 30, max: 40 },
+        { min: 40, max: 50 },
+        { min: 50, max: 60 },
+        { min: 60, max: 70 },
+        { min: 70, max: 80 },
+        { min: 80, max: 90 },
+        { min: 90, max: 100 }
     ]
 
     const calculate = () => {

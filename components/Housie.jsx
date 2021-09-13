@@ -7,11 +7,18 @@ const Housie = () => {
     const [disabled, setDisabled] = useState(true)
     const [flag, setFlag] = useState(false)
 
-    const generateTickets = () => {
-        setFlag(true)
+    const generateTickets = async () => {
+        if (flag) {
+            setFlag(false)
+        }
+
+        setTimeout(() => {
+            setFlag(true)
+        }, 100)
     }
 
     const onChange = (e) => {
+        setFlag(false)
         if (!e.target.value) {
             setDisabled(true)
             setNumber(e.target.value)

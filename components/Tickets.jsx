@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
 const Tickets = ({ number }) => {
+
+    const [finalData, setFinalData] = useState([])
 
     const limits = [
         { min: 0, max: 9 },
@@ -28,9 +30,9 @@ const Tickets = ({ number }) => {
         for (let i = 0; i < 3; i++) {
             row = []
             for (let i = 0; i < 5; i++) {
-                number = parseInt(Math.random() * (9))
-                while (row.includes(number))
-                    number = parseInt(Math.random() * (9))
+                do {
+                    number = Math.floor(Math.random() * 9)
+                } while (row.includes(number))
 
                 row.push(number)
             }
@@ -38,14 +40,15 @@ const Tickets = ({ number }) => {
             row.sort()
             data.push(row)
         }
+        console.log(data)
 
         for (let i = 0; i < 9; i++) {
             col = []
             for (let j = 0; j < 3; j++) {
                 if (data[j].includes(i)) {
-                    number = parseInt(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
+                    number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
                     while (col.includes(number)) {
-                        number = parseInt(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
+                        number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
                     }
 
                     col.push(number)
@@ -68,7 +71,7 @@ const Tickets = ({ number }) => {
         for (let i = 0; i < 3; i++) {
             TDs = []
             for (let j = 0; j < 9; j++) {
-                if (data[j][i]) {
+                if (!isNaN(data[j][i])) {
                     TDs.push(<td key={uuidv4()}>{data[j][i]}</td>)
                 } else {
                     TDs.push(<td key={uuidv4()}></td>)
@@ -128,11 +131,19 @@ const Tickets = ({ number }) => {
         pdf.save('Tickets.pdf')
     }
 
+    useEffect(() => {
+        setFinalData(renderFinal())
+
+        return () => {
+            setFinalData([])
+        }
+    }, [])
+
     return (
         <div className="tickets_container">
             <button onClick={printToPDF}>Print to PDF</button>
             <div id="tickets">
-                {renderFinal()}
+                {finalData}
             </div>
         </div>
     )

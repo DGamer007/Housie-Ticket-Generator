@@ -27,11 +27,11 @@ const Tickets = ({ number }) => {
         let row = []
         let col = []
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
             row = []
             for (let i = 0; i < 5; i++) {
                 do {
-                    number = Math.floor(Math.random() * 9)
+                    number = Math.floor(Math.random() * 10)
                 } while (row.includes(number))
 
                 row.push(number)
@@ -42,9 +42,9 @@ const Tickets = ({ number }) => {
         }
         console.log(data)
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 10; i++) {
             col = []
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < 5; j++) {
                 if (data[j].includes(i)) {
                     number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
                     while (col.includes(number)) {
@@ -68,9 +68,9 @@ const Tickets = ({ number }) => {
         const finalOutput = []
         let TDs = []
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
             TDs = []
-            for (let j = 0; j < 9; j++) {
+            for (let j = 0; j < 10; j++) {
                 if (!isNaN(data[j][i])) {
                     TDs.push(<td key={uuidv4()}>{data[j][i]}</td>)
                 } else {
@@ -91,7 +91,7 @@ const Tickets = ({ number }) => {
         let counter = 0
 
         for (let i = 0; i < number; i++) {
-            if (counter === 6) {
+            if (counter === 4) {
                 counter = 0
                 allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
                 temp = []
@@ -120,7 +120,7 @@ const Tickets = ({ number }) => {
         let height = 0
 
         for (let i = 0; i < sections.length; i++) {
-            height = parseInt(270 * (sections[i].childElementCount / 6))
+            height = parseInt(270 * (sections[i].childElementCount / 4))
             const canvas = await html2canvas(sections[i])
             const imageData = canvas.toDataURL('image/png')
             pdf.addImage(imageData, 'PNG', 23, 12, 160, height)

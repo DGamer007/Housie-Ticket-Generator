@@ -17,7 +17,6 @@ const Tickets = ({ number }) => {
         { min: 60, max: 70 },
         { min: 70, max: 80 },
         { min: 80, max: 90 },
-        { min: 90, max: 100 }
     ]
 
     const calculate = () => {
@@ -27,7 +26,7 @@ const Tickets = ({ number }) => {
         let row = []
         let col = []
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             row = []
             for (let i = 0; i < 5; i++) {
                 do {
@@ -42,9 +41,9 @@ const Tickets = ({ number }) => {
         }
         console.log(data)
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 9; i++) {
             col = []
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < 3; j++) {
                 if (data[j].includes(i)) {
                     number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
                     while (col.includes(number)) {
@@ -68,9 +67,9 @@ const Tickets = ({ number }) => {
         const finalOutput = []
         let TDs = []
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             TDs = []
-            for (let j = 0; j < 10; j++) {
+            for (let j = 0; j < 9; j++) {
                 if (!isNaN(data[j][i])) {
                     TDs.push(<td key={uuidv4()}>{data[j][i]}</td>)
                 } else {

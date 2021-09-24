@@ -3,21 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
-const Tickets = ({ number }) => {
+const Tickets = ({ number, rows, columns }) => {
 
     const [finalData, setFinalData] = useState([])
-
-    const limits = [
-        { min: 0, max: 10 },
-        { min: 10, max: 20 },
-        { min: 20, max: 30 },
-        { min: 30, max: 40 },
-        { min: 40, max: 50 },
-        { min: 50, max: 60 },
-        { min: 60, max: 70 },
-        { min: 70, max: 80 },
-        { min: 80, max: 90 },
-    ]
 
     const calculate = () => {
         const data = []
@@ -26,11 +14,11 @@ const Tickets = ({ number }) => {
         let row = []
         let col = []
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < rows; i++) {
             row = []
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < Math.ceil(columns / 2); i++) {
                 do {
-                    number = Math.floor(Math.random() * 10)
+                    number = Math.floor(Math.random() * columns)
                 } while (row.includes(number))
 
                 row.push(number)
@@ -39,15 +27,14 @@ const Tickets = ({ number }) => {
             row.sort()
             data.push(row)
         }
-        console.log(data)
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < columns; i++) {
             col = []
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < rows; j++) {
                 if (data[j].includes(i)) {
-                    number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
+                    number = Math.floor(Math.random() * 10 + (i * 10))
                     while (col.includes(number)) {
-                        number = Math.floor(Math.random() * (limits[i].max - limits[i].min) + limits[i].min)
+                        number = Math.floor(Math.random() * 10 + (i * 10))
                     }
 
                     col.push(number)
@@ -55,7 +42,6 @@ const Tickets = ({ number }) => {
                     col.push(undefined)
                 }
             }
-
             cols.push(col)
         }
 
@@ -67,9 +53,9 @@ const Tickets = ({ number }) => {
         const finalOutput = []
         let TDs = []
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < rows; i++) {
             TDs = []
-            for (let j = 0; j < 9; j++) {
+            for (let j = 0; j < columns; j++) {
                 if (!isNaN(data[j][i])) {
                     TDs.push(<td key={uuidv4()}>{data[j][i]}</td>)
                 } else {
@@ -90,7 +76,7 @@ const Tickets = ({ number }) => {
         let counter = 0
 
         for (let i = 0; i < number; i++) {
-            if (counter === 4) {
+            if (counter === (9 - rows)) {
                 counter = 0
                 allTables.push(<div className="section" key={uuidv4()}>{temp}</div>)
                 temp = []
@@ -119,7 +105,7 @@ const Tickets = ({ number }) => {
         let height = 0
 
         for (let i = 0; i < sections.length; i++) {
-            height = parseInt(270 * (sections[i].childElementCount / 4))
+            height = parseInt(270 * (sections[i].childElementCount / (9 - rows)))
             const canvas = await html2canvas(sections[i])
             const imageData = canvas.toDataURL('image/png')
             pdf.addImage(imageData, 'PNG', 23, 12, 160, height)
